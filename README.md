@@ -1,1 +1,1 @@
-# Student-management-system
+Student Management System is a C++ console application used to manage student records. It allows adding, viewing, searching, updating, and deleting student details like ID, name, and marks. It uses OOP and file handling to store data permanently and provides a simple menu-driven interface.
