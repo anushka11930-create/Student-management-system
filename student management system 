@@ -1,0 +1,157 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+using namespace std;
+
+class Student {
+public:
+    int id;
+    string name;
+    int marks;
+
+    void input() {
+        cout << "Enter ID: ";
+        cin >> id;
+        cout << "Enter Name: ";
+        cin >> name;
+        cout << "Enter Marks: ";
+        cin >> marks;
+    }
+
+    void display() {
+        cout << "ID: " << id << " | Name: " << name << " | Marks: " << marks << endl;
+    }
+};
+
+// Save all students to file
+void saveToFile(vector<Student> &students) {
+    ofstream file("students.txt");
+    for (auto &s : students) {
+        file << s.id << " " << s.name << " " << s.marks << endl;
+    }
+    file.close();
+}
+
+// Load students from file
+void loadFromFile(vector<Student> &students) {
+    ifstream file("students.txt");
+    Student s;
+    while (file >> s.id >> s.name >> s.marks) {
+        students.push_back(s);
+    }
+    file.close();
+}
+
+// Add student
+void addStudent(vector<Student> &students) {
+    Student s;
+    s.input();
+    students.push_back(s);
+    cout << "✅ Student added successfully!\n";
+}
+
+// Display all students
+void displayStudents(vector<Student> &students) {
+    if (students.empty()) {
+        cout << "No records found!\n";
+        return;
+    }
+    for (auto &s : students) {
+        s.display();
+    }
+}
+
+// Search student
+void searchStudent(vector<Student> &students) {
+    int id;
+    cout << "Enter ID to search: ";
+    cin >> id;
+
+    for (auto &s : students) {
+        if (s.id == id) {
+            cout << "Student found:\n";
+            s.display();
+            return;
+        }
+    }
+    cout << "❌ Student not found!\n";
+}
+
+// Delete student
+void deleteStudent(vector<Student> &students) {
+    int id;
+    cout << "Enter ID to delete: ";
+    cin >> id;
+
+    for (int i = 0; i < students.size(); i++) {
+        if (students[i].id == id) {
+            students.erase(students.begin() + i);
+            cout << "🗑️ Student deleted!\n";
+            return;
+        }
+    }
+    cout << "❌ Student not found!\n";
+}
+
+// Update student
+void updateStudent(vector<Student> &students) {
+    int id;
+    cout << "Enter ID to update: ";
+    cin >> id;
+
+    for (auto &s : students) {
+        if (s.id == id) {
+            cout << "Enter new details:\n";
+            s.input();
+            cout << "✏️ Updated successfully!\n";
+            return;
+        }
+    }
+    cout << "❌ Student not found!\n";
+}
+
+int main() {
+    vector<Student> students;
+    loadFromFile(students);
+
+    int choice;
+
+    do {
+        cout << "\n===== Student Management System =====\n";
+        cout << "1. Add Student\n";
+        cout << "2. Display Students\n";
+        cout << "3. Search Student\n";
+        cout << "4. Delete Student\n";
+        cout << "5. Update Student\n";
+        cout << "6. Save & Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            addStudent(students);
+            break;
+        case 2:
+            displayStudents(students);
+            break;
+        case 3:
+            searchStudent(students);
+            break;
+        case 4:
+            deleteStudent(students);
+            break;
+        case 5:
+            updateStudent(students);
+            break;
+        case 6:
+            saveToFile(students);
+            cout << "💾 Data saved. Exiting...\n";
+            break;
+        default:
+            cout << "Invalid choice!\n";
+        }
+
+    } while (choice != 6);
+
+    return 0;
+}
